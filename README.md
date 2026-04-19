@@ -3,7 +3,7 @@
 [![CI](https://github.com/westbrookai/zipsa-runtime/actions/workflows/ci.yml/badge.svg)](https://github.com/westbrookai/zipsa-runtime/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-> Lightweight Docker runtime for executing SKILLs with Claude Code, Codex, and OpenClaw
+> Lightweight Docker runtime for executing SKILLs with Claude Code, Codex, and Gemini CLI
 
 ## Overview
 
@@ -11,11 +11,11 @@ This Docker image provides a ready-to-use environment for running SKILL-based ag
 
 - **Claude Code**: Official Anthropic CLI
 - **Codex**: Alternative agent runtime
-- **OpenClaw**: Open-source agent framework
+- **Gemini CLI**: Google's Gemini agent
 - **MCP Support**: Pre-configured MCP server support (`npx`, `uvx`, `pipx`)
 
 **Base Image:** Debian Slim
-**Target Size:** ~400-500MB
+**Image Size:** ~2.3GB
 **Use Case:** Runtime-agnostic SKILL execution
 
 ---
@@ -80,14 +80,13 @@ docker run -it --rm \
   skill-runtime:latest codex
 ```
 
-### 3. OpenClaw with SKILL
+### 3. Gemini CLI Execution
 
 ```bash
 docker run -it --rm \
   -v $(pwd):/workspace \
-  -v $(pwd)/servers.json:/app/servers.json \
   -w /workspace \
-  skill-runtime:latest openclaw --skill my-skill
+  skill-runtime:latest gemini
 ```
 
 ### 4. MCP Server Configuration
@@ -272,12 +271,12 @@ docker run -it --rm skill-runtime:test /bin/bash
 - [x] Basic Debian Slim image
 - [x] Claude Code support
 - [x] Codex integration
-- [x] OpenClaw integration
-- [ ] Multi-architecture builds (amd64, arm64)
-- [ ] CI/CD pipeline
+- [x] Gemini CLI integration
+- [x] Multi-architecture builds (amd64, arm64)
+- [x] CI/CD pipeline
+- [x] Image size optimization (2.3GB, 45% reduction)
 - [ ] Docker Hub publishing
 - [ ] Security hardening
-- [ ] Image size optimization
 
 ---
 

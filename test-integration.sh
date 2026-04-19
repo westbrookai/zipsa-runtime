@@ -131,13 +131,13 @@ else
     print_fail "Codex not found or not executable"
 fi
 
-# Test 9: OpenClaw is installed and executable
-print_test "OpenClaw is installed and executable"
-if docker run --rm "$IMAGE_NAME" openclaw --version > /dev/null 2>&1; then
-    OPENCLAW_VERSION=$(docker run --rm "$IMAGE_NAME" openclaw --version 2>&1 | head -n1)
-    print_pass "OpenClaw installed: ${OPENCLAW_VERSION}"
+# Test 9: Gemini CLI is installed and executable
+print_test "Gemini CLI is installed and executable"
+if docker run --rm "$IMAGE_NAME" gemini --version > /dev/null 2>&1; then
+    GEMINI_VERSION=$(docker run --rm "$IMAGE_NAME" gemini --version 2>&1 | head -n1)
+    print_pass "Gemini CLI installed: ${GEMINI_VERSION}"
 else
-    print_fail "OpenClaw not found or not executable"
+    print_fail "Gemini CLI not found or not executable"
 fi
 
 # Test 10: MCP servers can be invoked (npx test)

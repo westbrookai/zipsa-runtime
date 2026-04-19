@@ -23,7 +23,7 @@ ARG PIPX_VERSION="1.1.0-1"
 # NPM packages
 ARG CLAUDE_CODE_VERSION="2.1.114"
 ARG CODEX_VERSION="0.121.0"
-ARG OPENCLAW_VERSION="2026.4.15"
+ARG GEMINI_CLI_VERSION="0.32.1"
 
 #-----------------------------------------------------------
 # Container Configuration
@@ -31,8 +31,8 @@ ARG OPENCLAW_VERSION="2026.4.15"
 
 # Metadata
 LABEL maintainer="your-email@example.com"
-LABEL description="SKILL Runtime with Claude Code, Codex, and OpenClaw"
-LABEL version="0.1.0"
+LABEL description="SKILL Runtime with Claude Code, Codex, and Gemini CLI"
+LABEL version="0.2.0"
 
 # Prevent interactive prompts during installation
 ENV DEBIAN_FRONTEND=noninteractive
@@ -113,21 +113,22 @@ RUN apt-get update && \
 #-----------------------------------------------------------
 
 # Install Claude Code (official Anthropic CLI)
-# Using npm global install
-RUN npm install -g @anthropic-ai/claude-code@${CLAUDE_CODE_VERSION} && \
+# Using npm global install with --omit=dev to exclude devDependencies
+RUN npm install -g --omit=dev @anthropic-ai/claude-code@${CLAUDE_CODE_VERSION} && \
     npm cache clean --force
 
 # Verify Claude Code installation
 RUN claude --version
 
 # Install Codex (OpenAI's coding agent)
-# Install via npm global
-RUN npm install -g @openai/codex@${CODEX_VERSION} || echo "Codex installation skipped (package may require access)" && \
+# Install via npm global with --omit=dev
+RUN npm install -g --omit=dev @openai/codex@${CODEX_VERSION} || echo "Codex installation skipped (package may require access)" && \
     npm cache clean --force
 
-# Install OpenClaw (open-source agent framework)
-# Install via npm global if available, or pipx as fallback
-RUN npm install -g openclaw@${OPENCLAW_VERSION} || pipx install "openclaw==${OPENCLAW_VERSION}" || echo "OpenClaw installation skipped (package may not exist yet)"
+# Install Gemini CLI (Google's Gemini agent)
+# Install via npm global with --omit=dev
+RUN npm install -g --omit=dev @google/gemini-cli@${GEMINI_CLI_VERSION} && \
+    npm cache clean --force
 
 # Create workspace directory if it doesn't exist
 RUN mkdir -p /workspace
