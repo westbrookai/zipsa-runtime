@@ -14,8 +14,8 @@ This Docker image provides a ready-to-use environment for running SKILL-based ag
 - **Gemini CLI**: Google's Gemini agent
 - **MCP Support**: Pre-configured MCP server support (`npx`, `uvx`, `pipx`)
 
-**Base Image:** Debian Slim
-**Image Size:** ~2.3GB
+**Base Image:** Debian Slim (Multi-stage Build)
+**Image Size:** ~1.9GB (54.9% reduction from initial 4.2GB)
 **Use Case:** Runtime-agnostic SKILL execution
 
 ---
@@ -274,7 +274,8 @@ docker run -it --rm skill-runtime:test /bin/bash
 - [x] Gemini CLI integration
 - [x] Multi-architecture builds (amd64, arm64)
 - [x] CI/CD pipeline
-- [x] Image size optimization (2.3GB, 45% reduction)
+- [x] Multi-stage build optimization
+- [x] Image size optimization (1.9GB, 54.9% reduction)
 - [ ] Docker Hub publishing
 - [ ] Security hardening
 
