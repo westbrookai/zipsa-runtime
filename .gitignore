@@ -1,0 +1,53 @@
+# Environment and secrets
+env.txt
+*.keys.json
+*.keys.json.json
+.env
+.env.*
+servers.json
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+
+# Docker
+.dockerignore.bak
+docker-compose.override.yml
+
+# IDE
+.vscode/
+.idea/
+.claude/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+*.log
+/tmp/
+docker-build.log
+
+# Test outputs
+test-results/
+coverage/
+
+# Temporary files
+*.tmp
+*.bak
+*.backup

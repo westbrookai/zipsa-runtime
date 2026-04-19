@@ -1,0 +1,61 @@
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Documentation
+README.md
+CLAUDE.md
+*.md
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+
+# Environment and secrets
+env.txt
+*.keys.json
+*.keys.json.json
+.env
+.env.*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs and temporary files
+*.log
+/tmp/
+*.tmp
+*.bak
+*.backup
+docker-build.log
+
+# Test files (not needed in image)
+test-integration.sh
+test-results/
+coverage/
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose*.yml
