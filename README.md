@@ -25,21 +25,21 @@ This Docker image provides a ready-to-use environment for running SKILL-based ag
 ### Pull and Run
 
 ```bash
-# Pull from Docker Hub
-docker pull westbrookai/zipsa-runtime:latest
+# Pull from GitHub Container Registry
+docker pull ghcr.io/westbrookai/zipsa-runtime:latest
 
 # Run Claude Code interactively
 docker run -it --rm \
   -v $(pwd):/workspace \
   -w /workspace \
-  westbrookai/zipsa-runtime:latest claude
+  ghcr.io/westbrookai/zipsa-runtime:latest claude
 
 # Run with MCP config
 docker run -it --rm \
   -v $(pwd):/workspace \
   -v $(pwd)/servers.json:/app/servers.json \
   -w /workspace \
-  westbrookai/zipsa-runtime:latest claude --mcp-config /app/servers.json
+  ghcr.io/westbrookai/zipsa-runtime:latest claude --mcp-config /app/servers.json
 ```
 
 ### Build Locally
@@ -68,7 +68,7 @@ docker run --rm skill-runtime:latest uvx --version
 docker run -it --rm \
   -v $(pwd):/workspace \
   -w /workspace \
-  westbrookai/zipsa-runtime:latest claude
+  ghcr.io/westbrookai/zipsa-runtime:latest claude
 ```
 
 ### 2. Codex Execution
@@ -77,7 +77,7 @@ docker run -it --rm \
 docker run -it --rm \
   -v $(pwd):/workspace \
   -w /workspace \
-  westbrookai/zipsa-runtime:latest codex
+  ghcr.io/westbrookai/zipsa-runtime:latest codex
 ```
 
 ### 3. Gemini CLI Execution
@@ -86,7 +86,7 @@ docker run -it --rm \
 docker run -it --rm \
   -v $(pwd):/workspace \
   -w /workspace \
-  westbrookai/zipsa-runtime:latest gemini
+  ghcr.io/westbrookai/zipsa-runtime:latest gemini
 ```
 
 ### 4. MCP Server Configuration
@@ -120,7 +120,7 @@ docker run -it --rm \
   -v $(pwd)/servers.json:/app/servers.json \
   -e ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY \
   -w /workspace \
-  westbrookai/zipsa-runtime:latest claude --mcp-config /app/servers.json
+  ghcr.io/westbrookai/zipsa-runtime:latest claude --mcp-config /app/servers.json
 ```
 
 ---
@@ -148,7 +148,7 @@ docker run -it --rm \
   -e ANTHROPIC_API_KEY \
   -v $(pwd):/workspace \
   -w /workspace \
-  westbrookai/zipsa-runtime:latest claude
+  ghcr.io/westbrookai/zipsa-runtime:latest claude
 ```
 
 ### Volume Mounts
@@ -230,7 +230,7 @@ docker run --rm skill-runtime:latest which npx
 # Run as current user
 docker run --rm --user $(id -u):$(id -g) \
   -v $(pwd):/workspace \
-  westbrookai/zipsa-runtime:latest claude
+  ghcr.io/westbrookai/zipsa-runtime:latest claude
 ```
 
 ### Issue: Large image size (>600MB)
@@ -276,7 +276,7 @@ docker run -it --rm skill-runtime:test /bin/bash
 - [x] CI/CD pipeline
 - [x] Multi-stage build optimization
 - [x] Image size optimization (1.9GB, 54.9% reduction)
-- [x] Docker Hub publishing (westbrookai/zipsa-runtime)
+- [x] GitHub Container Registry publishing (ghcr.io/westbrookai/zipsa-runtime)
 - [ ] Security hardening
 - [ ] Automated security scanning
 - [ ] Container signing and verification
