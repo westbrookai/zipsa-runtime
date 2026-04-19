@@ -1,5 +1,8 @@
 # Zipsa Runtime
 
+[![CI](https://github.com/westbrookai/zipsa-runtime/actions/workflows/ci.yml/badge.svg)](https://github.com/westbrookai/zipsa-runtime/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 > Lightweight Docker runtime for executing SKILLs with Claude Code, Codex, and OpenClaw
 
 ## Overview
