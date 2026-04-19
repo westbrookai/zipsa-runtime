@@ -14,6 +14,7 @@ ARG CURL_VERSION="7.88.1-10+deb12u14"
 ARG CA_CERTIFICATES_VERSION="20230311+deb12u1"
 ARG GIT_VERSION="1:2.39.5-0+deb12u3"
 ARG BUILD_ESSENTIAL_VERSION="12.9"
+ARG NODEJS_VERSION="24.14.1-1nodesource1"
 ARG PYTHON3_VERSION="3.11.2-1+b1"
 ARG PYTHON3_PIP_VERSION="23.0.1+dfsg-1"
 ARG PYTHON3_VENV_VERSION="3.11.2-1+b1"
@@ -64,7 +65,7 @@ RUN apt-get update && \
 # Install Node.js 24.x (for npx, npm, and OpenClaw support)
 # Using NodeSource official repository
 RUN curl -fsSL https://deb.nodesource.com/setup_24.x | bash - && \
-    apt-get install -y --no-install-recommends nodejs && \
+    apt-get install -y --no-install-recommends nodejs=${NODEJS_VERSION} && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
