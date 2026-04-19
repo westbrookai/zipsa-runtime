@@ -4,6 +4,30 @@
 
 FROM debian:bookworm-slim
 
+#-----------------------------------------------------------
+# Build Arguments - Package Versions
+# Update these versions to pin specific package versions
+#-----------------------------------------------------------
+
+# System packages (apt)
+ARG CURL_VERSION="7.88.1-10+deb12u14"
+ARG CA_CERTIFICATES_VERSION="20230311+deb12u1"
+ARG GIT_VERSION="1:2.39.5-0+deb12u3"
+ARG BUILD_ESSENTIAL_VERSION="12.9"
+ARG PYTHON3_VERSION="3.11.2-1+b1"
+ARG PYTHON3_PIP_VERSION="23.0.1+dfsg-1"
+ARG PYTHON3_VENV_VERSION="3.11.2-1+b1"
+ARG PIPX_VERSION="1.1.0-1"
+
+# NPM packages
+ARG CLAUDE_CODE_VERSION="2.1.114"
+ARG CODEX_VERSION="0.121.0"
+ARG OPENCLAW_VERSION="2026.4.15"
+
+#-----------------------------------------------------------
+# Container Configuration
+#-----------------------------------------------------------
+
 # Metadata
 LABEL maintainer="your-email@example.com"
 LABEL description="SKILL Runtime with Claude Code, Codex, and OpenClaw"
@@ -12,8 +36,15 @@ LABEL version="0.1.0"
 # Prevent interactive prompts during installation
 ENV DEBIAN_FRONTEND=noninteractive
 
+# Set shell to use pipefail for better error handling
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
 # Set working directory
 WORKDIR /workspace
+
+#-----------------------------------------------------------
+# System Dependencies Installation
+#-----------------------------------------------------------
 
 # Install system dependencies in a single layer
 # - curl: for downloading installers
@@ -22,10 +53,10 @@ WORKDIR /workspace
 # - build-essential: C compiler for native modules
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-        curl \
-        ca-certificates \
-        git \
-        build-essential \
+        curl=${CURL_VERSION} \
+        ca-certificates=${CA_CERTIFICATES_VERSION} \
+        git=${GIT_VERSION} \
+        build-essential=${BUILD_ESSENTIAL_VERSION} \
         && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
@@ -40,13 +71,17 @@ RUN curl -fsSL https://deb.nodesource.com/setup_24.x | bash - && \
 # Verify Node.js installation
 RUN node --version && npm --version && npx --version
 
+#-----------------------------------------------------------
+# Python Installation
+#-----------------------------------------------------------
+
 # Install Python 3.11+ (Debian Bookworm comes with Python 3.11)
 # Install pip and setuptools
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-        python3 \
-        python3-pip \
-        python3-venv \
+        python3=${PYTHON3_VERSION} \
+        python3-pip=${PYTHON3_PIP_VERSION} \
+        python3-venv=${PYTHON3_VENV_VERSION} \
         && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
@@ -66,15 +101,19 @@ RUN curl -LsSf https://astral.sh/uv/install.sh | sh && \
 # Install pipx (for installing Python CLI tools in isolated environments)
 # Using apt instead of pip to avoid PEP 668 externally-managed-environment error
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends pipx && \
+    apt-get install -y --no-install-recommends pipx=${PIPX_VERSION} && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     pipx ensurepath && \
     pipx --version
 
+#-----------------------------------------------------------
+# Agent Runtimes Installation
+#-----------------------------------------------------------
+
 # Install Claude Code (official Anthropic CLI)
 # Using npm global install
-RUN npm install -g @anthropic-ai/claude-code && \
+RUN npm install -g @anthropic-ai/claude-code@${CLAUDE_CODE_VERSION} && \
     npm cache clean --force
 
 # Verify Claude Code installation
@@ -82,12 +121,12 @@ RUN claude --version
 
 # Install Codex (OpenAI's coding agent)
 # Install via npm global
-RUN npm install -g @openai/codex || echo "Codex installation skipped (package may require access)" && \
+RUN npm install -g @openai/codex@${CODEX_VERSION} || echo "Codex installation skipped (package may require access)" && \
     npm cache clean --force
 
 # Install OpenClaw (open-source agent framework)
 # Install via npm global if available, or pipx as fallback
-RUN npm install -g openclaw || pipx install openclaw || echo "OpenClaw installation skipped (package may not exist yet)"
+RUN npm install -g openclaw@${OPENCLAW_VERSION} || pipx install "openclaw==${OPENCLAW_VERSION}" || echo "OpenClaw installation skipped (package may not exist yet)"
 
 # Create workspace directory if it doesn't exist
 RUN mkdir -p /workspace
