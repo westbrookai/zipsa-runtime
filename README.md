@@ -1,4 +1,4 @@
-# SKILL Runtime Docker Image
+# Zipsa Runtime
 
 > Lightweight Docker runtime for executing SKILLs with Claude Code, Codex, and OpenClaw
 
@@ -22,32 +22,32 @@ This Docker image provides a ready-to-use environment for running SKILL-based ag
 ### Pull and Run
 
 ```bash
-# Pull the image (when published)
-docker pull your-registry/skill-runtime:latest
+# Docker Hub image coming soon!
+# For now, build locally (see below)
 
 # Run Claude Code interactively
 docker run -it --rm \
   -v $(pwd):/workspace \
   -w /workspace \
-  skill-runtime:latest claude
+  zipsa-runtime:latest claude
 
 # Run with MCP config
 docker run -it --rm \
   -v $(pwd):/workspace \
   -v $(pwd)/servers.json:/app/servers.json \
   -w /workspace \
-  skill-runtime:latest claude --mcp-config /app/servers.json
+  zipsa-runtime:latest claude --mcp-config /app/servers.json
 ```
 
 ### Build Locally
 
 ```bash
 # Clone repository
-git clone <your-repo-url>
-cd skill-runtime-poc
+git clone https://github.com/westbrookai/zipsa-runtime.git
+cd zipsa-runtime
 
 # Build image
-docker build -t skill-runtime:latest .
+docker build -t zipsa-runtime:latest .
 
 # Verify installation
 docker run --rm skill-runtime:latest claude --version
@@ -170,14 +170,14 @@ docker run -it --rm \
 
 ```bash
 # 1. Clone repository
-git clone <your-repo-url>
-cd skill-runtime-poc
+git clone https://github.com/westbrookai/zipsa-runtime.git
+cd zipsa-runtime
 
 # 2. (Optional) Lint Dockerfile
 hadolint Dockerfile
 
 # 3. Build image
-docker build -t skill-runtime:latest .
+docker build -t zipsa-runtime:latest .
 
 # 4. Test build
 docker run --rm skill-runtime:latest claude --version
@@ -268,18 +268,19 @@ docker run -it --rm skill-runtime:test /bin/bash
 
 - [x] Basic Debian Slim image
 - [x] Claude Code support
-- [ ] Codex integration
-- [ ] OpenClaw integration
+- [x] Codex integration
+- [x] OpenClaw integration
 - [ ] Multi-architecture builds (amd64, arm64)
 - [ ] CI/CD pipeline
+- [ ] Docker Hub publishing
 - [ ] Security hardening
-- [ ] Image size optimization (<400MB)
+- [ ] Image size optimization
 
 ---
 
 ## License
 
-[Your License Here]
+MIT License - see [LICENSE](./LICENSE) file for details
 
 ## Contributing
 
@@ -292,9 +293,10 @@ docker run -it --rm skill-runtime:test /bin/bash
 
 ## Support
 
-- **Issues:** [GitHub Issues](your-repo-url/issues)
-- **Discussions:** [GitHub Discussions](your-repo-url/discussions)
+- **Issues:** [GitHub Issues](https://github.com/westbrookai/zipsa-runtime/issues)
+- **Discussions:** [GitHub Discussions](https://github.com/westbrookai/zipsa-runtime/discussions)
 - **Documentation:** [CLAUDE.md](./CLAUDE.md)
+- **Repository:** https://github.com/westbrookai/zipsa-runtime
 
 ---
 
