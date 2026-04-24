@@ -125,6 +125,25 @@ docker run -it --rm \
 
 ---
 
+## Docker Compose Deployment
+
+For easier setup, use the pre-configured Docker Compose example:
+
+```bash
+cd examples/minimal-agent
+./setup.sh  # One-command setup
+```
+
+**Features:**
+- Automated environment setup
+- Pre-configured MCP servers
+- Volume mounts for workspace
+- Auto-restart on failures
+
+See [examples/minimal-agent/README.md](./examples/minimal-agent/README.md) for detailed documentation.
+
+---
+
 ## Configuration
 
 ### Environment Variables
