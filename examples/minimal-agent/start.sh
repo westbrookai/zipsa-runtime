@@ -1,67 +1,51 @@
 #!/bin/bash
-# ============================================================================
-# Start Script for Minimal Agent (Linux/macOS)
-# ============================================================================
-#
-# This script starts the minimal-agent Docker container with:
-# - Environment variables from .env file
-# - Port mapping from .env
-# - Detached mode (runs in background)
-# - Auto-restart on failure
-# - Container name for easy management
-#
-# Usage: ./start.sh
-# ============================================================================
+set -e
 
-set -e  # Exit on error
+# Colors for output
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+NC='\033[0m' # No Color
 
-echo "============================================================================"
-echo "Starting Minimal Agent"
-echo "============================================================================"
-echo
-
-# Check if .env file exists
+# Check .env exists
 if [ ! -f .env ]; then
-    echo "[ERROR] .env file not found"
-    echo "Please run ./setup.sh first"
+    echo -e "${RED}Error: Configuration not found${NC}"
+    echo "Please run './setup.sh' first"
     exit 1
 fi
 
-# Load .env file
+# Load environment variables
 source .env
 
-# Check if container already exists
-if docker ps -a --format '{{.Names}}' | grep -q '^minimal-agent$'; then
-    echo "[INFO] Container 'minimal-agent' already exists"
-
-    # Check if it's running
-    if docker ps --format '{{.Names}}' | grep -q '^minimal-agent$'; then
-        echo "[INFO] Container is already running"
-        echo
-        echo "Agent is available at: http://localhost:${PORT}"
-        exit 0
-    fi
-
-    echo "[INFO] Starting existing container..."
-    docker start minimal-agent
-else
-    echo "[INFO] Creating and starting new container..."
-    docker run -d \
-        --name minimal-agent \
-        --env-file .env \
-        -p "${PORT}:3000" \
-        --restart unless-stopped \
-        minimal-agent
+# Check workspace directory exists
+if [ ! -d workspace ]; then
+    echo "Creating workspace directory..."
+    mkdir -p workspace
 fi
 
-echo
-echo "============================================================================"
-echo "Agent Started Successfully"
-echo "============================================================================"
-echo
-echo "Agent is available at: http://localhost:${PORT}"
-echo
-echo "Useful commands:"
-echo "  View logs:  docker logs minimal-agent"
-echo "  Stop agent: ./stop.sh"
-echo
+# Start container
+echo "Starting ${RUNTIME_AGENT} agent..."
+docker compose up -d
+
+# Wait for container to be healthy
+echo "Waiting for container to initialize..."
+sleep 2
+
+# Check if container is running
+if docker compose ps | grep -q "running"; then
+    echo -e "${GREEN}✓ Agent started successfully${NC}"
+else
+    echo -e "${RED}✗ Agent failed to start${NC}"
+    echo "Last 20 lines of logs:"
+    docker compose logs --tail=20
+    exit 1
+fi
+
+# Show logs
+echo ""
+echo "════════════════════════════════════════"
+echo "Agent is running!"
+echo "════════════════════════════════════════"
+echo ""
+echo "Attaching to logs (Ctrl+C to detach, won't stop container)..."
+echo ""
+docker compose logs -f

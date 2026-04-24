@@ -227,7 +227,7 @@ test_readme() {
     fi
 
     # Check for required sections
-    if ! grep -q "# Minimal Agent" README.md; then
+    if ! grep -q "# Zipsa Runtime: Minimal Agent" README.md; then
         echo -e "${RED}FAILED${NC}"
         echo "  - Missing title"
         return 1

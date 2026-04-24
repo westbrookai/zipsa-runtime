@@ -1,27 +1,21 @@
 #!/bin/bash
-# ============================================================================
-# Stop Script for Minimal Agent (Linux/macOS)
-# ============================================================================
-#
-# This script stops the running minimal-agent Docker container.
-#
-# Usage: ./stop.sh
-# ============================================================================
 
-set -e  # Exit on error
+# Colors for output
+GREEN='\033[0;32m'
+NC='\033[0m' # No Color
 
-echo "============================================================================"
-echo "Stopping Minimal Agent"
-echo "============================================================================"
-echo
-
-# Check if container exists and is running
-if docker ps --format '{{.Names}}' | grep -q '^minimal-agent$'; then
-    echo "[INFO] Stopping container..."
-    docker stop minimal-agent
-    echo "[OK] Container stopped"
-else
-    echo "[INFO] Container 'minimal-agent' is not running"
+# Check if container is running
+if ! docker compose ps | grep -q "running"; then
+    echo "Agent is not running"
+    exit 0
 fi
 
-echo
+# Stop and remove containers
+echo "Stopping agent..."
+docker compose down
+
+# Note: Volumes are preserved by default
+echo -e "${GREEN}✓ Agent stopped${NC}"
+echo ""
+echo "Your workspace and configuration are preserved"
+echo "Run './start.sh' to restart the agent"

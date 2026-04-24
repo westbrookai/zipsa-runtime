@@ -1,27 +1,17 @@
 @echo off
-REM ============================================================================
-REM Stop Script for Minimal Agent (Windows)
-REM ============================================================================
-REM
-REM This script stops the running minimal-agent Docker container.
-REM
-REM Usage: stop.bat
-REM ============================================================================
 
-echo ============================================================================
-echo Stopping Minimal Agent
-echo ============================================================================
-echo.
-
-REM Check if container exists and is running
-docker ps --format "{{.Names}}" | findstr /x "minimal-agent" >nul 2>&1
-if %errorlevel% equ 0 (
-    echo [INFO] Stopping container...
-    docker stop minimal-agent
-    echo [OK] Container stopped
-) else (
-    echo [INFO] Container 'minimal-agent' is not running
+REM Check if container is running
+docker compose ps | findstr /c:"running" >nul
+if errorlevel 1 (
+    echo Agent is not running
+    exit /b 0
 )
 
+REM Stop and remove containers
+echo Stopping agent...
+docker compose down
+
+echo [OK] Agent stopped
 echo.
-pause
+echo Your workspace and configuration are preserved
+echo Run 'start.bat' to restart the agent
