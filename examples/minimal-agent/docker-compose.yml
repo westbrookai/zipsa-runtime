@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   minimal-agent:
     image: ghcr.io/westbrookai/zipsa-runtime:latest
