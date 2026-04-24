@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  minimal-agent:
+    image: ghcr.io/westbrookai/zipsa-runtime:latest
+    container_name: minimal-agent
+    stdin_open: true
+    tty: true
+
+    environment:
+      # API Keys from .env
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - GOOGLE_OAUTH_CLIENT_ID=${GOOGLE_OAUTH_CLIENT_ID:-}
+      - GOOGLE_OAUTH_CLIENT_SECRET=${GOOGLE_OAUTH_CLIENT_SECRET:-}
+
+      # Runtime selection
+      - RUNTIME_AGENT=${RUNTIME_AGENT:-claude}
+
+      # Terminal settings
+      - TERM=xterm-256color
+
+    volumes:
+      # Mount skills directory (read-only for safety)
+      - ./skills:/root/.claude/skills:ro
+
+      # Mount MCP server config
+      - ./servers.json:/app/servers.json:ro
+
+      # Mount workspace for user projects
+      - ./workspace:/workspace
+
+      # Optional: persist Claude settings across restarts
+      - claude-config:/root/.claude/config
+
+    working_dir: /workspace
+
+    # Command varies by runtime
+    command: >
+      sh -c "
+        case $${RUNTIME_AGENT} in
+          claude) claude --mcp-config /app/servers.json ;;
+          codex) codex --mcp-config /app/servers.json ;;
+          gemini) gemini --mcp-config /app/servers.json ;;
+          *) echo 'Invalid RUNTIME_AGENT' && exit 1 ;;
+        esac
+      "
+
+    # Restart policy
+    restart: unless-stopped
+
+volumes:
+  claude-config:
+    name: minimal-agent-config
