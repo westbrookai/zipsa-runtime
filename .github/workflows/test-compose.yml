@@ -51,12 +51,12 @@ jobs:
       - name: Verify Claude Code installation
         run: |
           cd examples/minimal-agent
-          docker compose exec -T agent claude --version
+          docker compose exec -T minimal-agent claude --version
 
       - name: Test workspace mount
         run: |
           cd examples/minimal-agent
-          docker compose exec -T agent test -d /workspace
+          docker compose exec -T minimal-agent test -d /workspace
 
       - name: Cleanup
         if: always()
