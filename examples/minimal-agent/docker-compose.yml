@@ -7,7 +7,7 @@ services:
 
     environment:
       # API Keys from .env
-      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      #- ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
       - GOOGLE_OAUTH_CLIENT_ID=${GOOGLE_OAUTH_CLIENT_ID:-}
       - GOOGLE_OAUTH_CLIENT_SECRET=${GOOGLE_OAUTH_CLIENT_SECRET:-}
 
@@ -18,8 +18,11 @@ services:
       - TERM=xterm-256color
 
     volumes:
+      # for credential
+      - ./credentials.json:/home/agent/.claude/.credentials.json
+
       # Mount skills directory (read-only for safety)
-      - ./skills:/root/.claude/skills:ro
+      - ./skills:/home/agent/.claude/skills:ro
 
       # Mount MCP server config
       - ./servers.json:/app/servers.json:ro
@@ -28,7 +31,7 @@ services:
       - ./workspace:/workspace
 
       # Optional: persist Claude settings across restarts
-      - claude-config:/root/.claude/config
+      - claude-config:/home/agent/.claude
 
     working_dir: /workspace
 

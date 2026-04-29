@@ -151,13 +151,6 @@ RUN apt-get update && \
 RUN ln -sf /usr/bin/python3 /usr/bin/python && \
     ln -sf /usr/bin/pip3 /usr/bin/pip
 
-# Add local bin to PATH first (for uv and pipx)
-ENV PATH="/root/.local/bin:${PATH}"
-
-# Install uv (modern Python package installer)
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh && \
-    uv --version && uvx --version
-
 # Install pipx (for isolated Python CLI tools)
 RUN apt-get update && \
     apt-get install -y --no-install-recommends pipx=${PIPX_VERSION} && \
@@ -166,17 +159,33 @@ RUN apt-get update && \
     pipx ensurepath && \
     pipx --version
 
-# Create workspace directory
-RUN mkdir -p /workspace
+# Create non-root user and group
+RUN groupadd -r agent -g 1000 && \
+    useradd -r -u 1000 -g agent -m -s /bin/bash agent && \
+    mkdir -p /workspace /home/agent/.claude/skills /home/agent/.local/bin && \
+    chown -R agent:agent /workspace /home/agent
 
 # Set environment variables for better CLI experience
 ENV TERM=xterm-256color
 ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
 
-# Add helpful aliases
-RUN echo 'alias ll="ls -lah"' >> /root/.bashrc && \
-    echo 'alias claude-help="claude --help"' >> /root/.bashrc
+# Switch to non-root user
+USER agent
+
+# Update PATH for non-root user
+ENV PATH="/home/agent/.local/bin:${PATH}"
+
+# Re-install uv for agent user
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh && \
+    uv --version && uvx --version
+
+# Add helpful aliases for agent user
+RUN echo 'alias ll="ls -lah"' >> /home/agent/.bashrc && \
+    echo 'alias claude-help="claude --help"' >> /home/agent/.bashrc
+
+# Set working directory
+WORKDIR /workspace
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
