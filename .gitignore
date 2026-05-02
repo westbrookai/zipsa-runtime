@@ -51,3 +51,6 @@ coverage/
 *.tmp
 *.bak
 *.backup
+
+# zipsa mcp Temporary file
+.zipsa-mcp-*.json

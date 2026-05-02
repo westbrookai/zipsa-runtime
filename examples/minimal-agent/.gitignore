@@ -1,55 +1,13 @@
-# Minimal Agent Example - Generated and temporary files
-# This directory contains a working agent environment
+# Minimal Agent - Runtime generated files
 
-# Environment and secrets
-.env
-.env.*
-env.txt
-*.keys.json
+# Authentication and configuration
+credentials.json
+claude.json
 
-# Workspace outputs (agent-generated files)
-workspace/*
-!workspace/.gitkeep
+# Runtime outputs
+*.jsonl
+*-out.txt
+workspace/*.out
 
-# Node.js
-node_modules/
-package-lock.json
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Python
-__pycache__/
-*.py[cod]
-*.pyo
-*.pyd
-.venv/
-venv/
-.pytest_cache/
-
-# Logs
-*.log
-logs/
-
-# Docker volumes
-docker-compose.override.yml
-
-# OS files
-.DS_Store
-Thumbs.db
-
-# Editor files
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-
-# Temporary files
-*.tmp
-*.bak
-*.backup
-
-# Test outputs
-test-results/
-coverage/
+# Temporary MCP configs
+.zipsa-mcp-*.json
