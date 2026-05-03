@@ -159,6 +159,39 @@ RUN apt-get update && \
     pipx ensurepath && \
     pipx --version
 
+# Install development tools for debugging and analysis
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        jq \
+        vim \
+        less \
+        tree \
+        ripgrep \
+        fd-find \
+        && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* && \
+    ln -sf /usr/bin/fdfind /usr/local/bin/fd
+
+# Install yq (YAML processor) - binary download
+RUN curl -fsSL https://github.com/mikefarah/yq/releases/latest/download/yq_linux_$(dpkg --print-architecture) \
+    -o /usr/local/bin/yq && \
+    chmod +x /usr/local/bin/yq && \
+    yq --version
+
+# Install fx (interactive JSON viewer) - npm global
+RUN npm install -g fx@35.0.0 && \
+    fx --version
+
+# Install bat (cat with syntax highlighting) - from Debian repos
+# Note: Debian packages 'bat' as 'batcat' to avoid conflict with bacula-console-qt
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends bat && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* && \
+    ln -sf /usr/bin/batcat /usr/local/bin/bat && \
+    bat --version
+
 # Create non-root user and group
 RUN groupadd -r agent -g 1000 && \
     useradd -r -u 1000 -g agent -m -s /bin/bash agent && \
