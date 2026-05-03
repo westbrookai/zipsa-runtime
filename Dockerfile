@@ -162,19 +162,19 @@ RUN apt-get update && \
 # Install development tools for debugging and analysis
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-        jq \
-        vim \
-        less \
-        tree \
-        ripgrep \
-        fd-find \
+        jq=1.6-2.1+deb12u1 \
+        vim=2:9.0.1378-2+deb12u2 \
+        less=590-2.1~deb12u2 \
+        tree=2.1.0-1 \
+        ripgrep=13.0.0-4+b2 \
+        fd-find=8.6.0-3 \
         && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     ln -sf /usr/bin/fdfind /usr/local/bin/fd
 
 # Install yq (YAML processor) - binary download
-RUN curl -fsSL https://github.com/mikefarah/yq/releases/latest/download/yq_linux_$(dpkg --print-architecture) \
+RUN curl -fsSL "https://github.com/mikefarah/yq/releases/latest/download/yq_linux_$(dpkg --print-architecture)" \
     -o /usr/local/bin/yq && \
     chmod +x /usr/local/bin/yq && \
     yq --version
@@ -186,7 +186,7 @@ RUN npm install -g fx@35.0.0 && \
 # Install bat (cat with syntax highlighting) - from Debian repos
 # Note: Debian packages 'bat' as 'batcat' to avoid conflict with bacula-console-qt
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends bat && \
+    apt-get install -y --no-install-recommends bat=0.22.1-4 && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     ln -sf /usr/bin/batcat /usr/local/bin/bat && \
